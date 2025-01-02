@@ -38,12 +38,30 @@
     </div>
 
 
-
+    <br>
+    <hr>
+    <br>
 
     <!-- Les boucles -->
     <ul>
-        <li v-for="movie in movies" :key="`${movies.indexOf(movie)}`" :class="`${movies.indexOf(movie)}`">{{ movie }}</li>
+        <li v-for="movie in movies" :key="`${movies.indexOf(movie)}`">
+            {{ movie }}
+            <button class="button" @click="deleteMovie(movie)">Supprimer</button>
+        </li>
     </ul>
+
+    <button class="button" @click="sortMovies">Réorganiser</button>
+    <br>
+    <form @submit.prevent="addMovie">
+        <!-- Le .prevent pour preventDefault() -->
+
+        <!-- v-model est l'équivalent de onChange en React mais un peu plus spécifique
+        au éléments de formulaire. Il permet de lier une référence à la valeur d'un élément de formulaire.
+        -->
+        <label for="newMovie">Nouveau film</label>
+        <input id="newMovie" type="text" name="newMovie" placeholder="Nouveau film" v-model="newMovie">
+        <button class="button">Ajouter</button>
+    </form>
 </template>
 
 
@@ -77,6 +95,21 @@ const movies = ref([
     "Le Roi Lion",
     "Titanic"
 ])
+
+const deleteMovie = (movie) => {
+    movies.value = movies.value.filter(m => m != movie)
+}
+
+const sortMovies = () => {
+    movies.value.sort();
+}
+
+const newMovie = ref('');
+
+const addMovie = () => {
+    movies.value.push(newMovie.value);
+    newMovie.value = '';
+}
 </script>
 
 
@@ -100,6 +133,11 @@ body {
     border-radius: 7px;
 
     cursor: pointer;
+}
+
+.button {
+    margin: 30px;
+    padding: 10px 20px;
 }
 
 .counter {
